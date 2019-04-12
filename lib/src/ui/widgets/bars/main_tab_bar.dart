@@ -17,9 +17,9 @@ class _MainTabBar extends State<MainTabBar> {
   Map<int, Widget> children = <int, Widget> {
     0: MovieList(),
     1: PacksList(),
-    2: MovieList(),
-    3: MovieList(),
-    4: SettingPage(),
+//    2: MovieList(),
+//    3: MovieList(),
+    2: SettingPage(),
   };
 
   @override
@@ -33,8 +33,14 @@ class _MainTabBar extends State<MainTabBar> {
         bottomNavigationBar:new Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.black,
+            primaryColor: Colors.greenAccent,
+              textTheme: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(caption: new TextStyle(color: Colors.white))
           ),
           child: new BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
             onTap: (int index) {
               _currentIndex = index;
@@ -54,14 +60,14 @@ class _MainTabBar extends State<MainTabBar> {
                 icon: new Icon(Icons.card_giftcard),
                 title: Text(''),
               ),
-              new BottomNavigationBarItem(
-                icon: new Icon(Icons.brush),
-                title: Text(''),
-              ),
-              new BottomNavigationBarItem(
-                icon: new Icon(Icons.shop),
-                title: Text(''),
-              ),
+//              new BottomNavigationBarItem(
+//                icon: new Icon(Icons.brush),
+//                title: Text(''),
+//              ),
+//              new BottomNavigationBarItem(
+//                icon: new Icon(Icons.shop),
+//                title: Text(''),
+//              ),
             ],
           ),
         ),

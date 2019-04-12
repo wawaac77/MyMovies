@@ -58,7 +58,7 @@ class MovieDetailState extends State<MovieDetail> {
         subTitle: 'in Now E - HBO Go Pack now',
         buttonTitle: 'Purchase',
         posterUrl: snapshot.posterUrl,
-        isButtonDisplay: true,
+        isButtonDisplay: false,
       ));
     }
     return bannerList;

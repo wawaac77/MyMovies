@@ -4,11 +4,15 @@ import 'package:my_movies/src/blocs/movies_bloc.dart';
 import 'package:my_movies/src/models/banner_model.dart';
 import 'package:my_movies/src/models/item_model.dart';
 import 'package:my_movies/src/ui/widgets/banner_carousel_view.dart';
+import 'package:my_movies/src/ui/widgets/banner_cell.dart';
 import 'package:my_movies/src/ui/widgets/circle_cell.dart';
 import 'package:my_movies/src/ui/widgets/bars/home_app_bar.dart';
 import 'package:my_movies/src/ui/widgets/pack_side_list.dart';
 import 'package:my_movies/src/ui/widgets/text_header.dart';
 import 'package:my_movies/src/ui/pages/movie_detail_stream.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+
 
 class MovieList extends StatefulWidget {
   @override
@@ -19,6 +23,8 @@ class MovieList extends StatefulWidget {
 
 class MovieListState extends State<MovieList> {
   List<BannerModel> bannerList;
+
+  int _currentBanner = 0;
 
   List<BannerModel> buildList(ItemModel snapshot) {
     bannerList = new List ();
@@ -67,10 +73,40 @@ class MovieListState extends State<MovieList> {
                               pinned: true,
                               elevation: 0.0,
                               flexibleSpace: FlexibleSpaceBar(
-                                  background: new BannerCarouselView (
-                                    bannerList: buildList(snapshot.data),
-                                    itemList: snapshot.data,
-                                  )
+                                  background: Stack(
+                                    children: <Widget>[
+                                      CarouselSlider(
+                                        height: 400.0,
+                                        items: getBannerCellList(snapshot.data),
+                                        autoPlay: true,
+                                        autoPlayAnimationDuration: Duration(seconds: 2),
+                                        onPageChanged: (index) {
+                                          setState(() {
+                                            _currentBanner = index;
+                                          });
+                                        },
+                                      ),
+                                      Positioned(
+                                        child: Center(
+                                          child: DotsIndicator(
+                                              numberOfDot: snapshot.data.results.length,
+                                              position: _currentBanner,
+                                              dotColor: Colors.grey,
+                                              dotActiveColor: Colors.greenAccent,
+                                              dotSpacing: const EdgeInsets.all(2.5),
+                                          ),
+                                        ),
+                                        bottom: 10,
+                                        left: 10,
+                                        right: 10,
+                                      )
+                                    ],
+                                  ),
+
+//                                  BannerCarouselView (
+//                                    bannerList: buildList(snapshot.data),
+//                                    itemList: snapshot.data,
+//                                  )
                               ),
                               backgroundColor: Color.fromRGBO(20, 20, 20, 0.5),
                             ),
@@ -195,5 +231,26 @@ class MovieListState extends State<MovieList> {
         );
       }),
     );
+  }
+
+  List<Widget> getBannerCellList (ItemModel data) {
+    List<BannerModel> bannerList = new List();
+    List<Widget> list = new List<Widget>();
+
+    for(var i = 0; i < data.results.length; i++){
+      bannerList.add(new BannerModel(
+        title: data.results[i].title,
+        subTitle: 'in Now E - HBO Go Pack now',
+        buttonTitle: 'Purchase',
+        posterUrl: data.results[i].poster_path,
+        isButtonDisplay: true,
+      ));
+
+      list.add(new BannerCell (
+        banner: bannerList[i],
+        item: data.results != null? data.results[i] : null,
+      ));
+    }
+    return list;
   }
 }
